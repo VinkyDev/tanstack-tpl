@@ -113,7 +113,7 @@ function Navbar() {
 							{item.label}
 						</Link>
 					);
-					})}
+				})}
 			</nav>
 		</header>
 	);
