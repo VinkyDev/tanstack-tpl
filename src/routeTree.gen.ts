@@ -9,14 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StoreRouteImport } from './routes/store'
+import { Route as PacerRouteImport } from './routes/pacer'
+import { Route as FormRouteImport } from './routes/form'
 import { Route as DemoRouteImport } from './routes/demo'
+import { Route as DbRouteImport } from './routes/db'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiExtractRouteImport } from './routes/api.extract'
 import { Route as ApiChatRouteImport } from './routes/api.chat'
 
+const StoreRoute = StoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PacerRoute = PacerRouteImport.update({
+  id: '/pacer',
+  path: '/pacer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FormRoute = FormRouteImport.update({
+  id: '/form',
+  path: '/form',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoRoute = DemoRouteImport.update({
   id: '/demo',
   path: '/demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DbRoute = DbRouteImport.update({
+  id: '/db',
+  path: '/db',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,45 +61,114 @@ const ApiChatRoute = ApiChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/db': typeof DbRoute
   '/demo': typeof DemoRoute
+  '/form': typeof FormRoute
+  '/pacer': typeof PacerRoute
+  '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
   '/api/extract': typeof ApiExtractRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/db': typeof DbRoute
   '/demo': typeof DemoRoute
+  '/form': typeof FormRoute
+  '/pacer': typeof PacerRoute
+  '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
   '/api/extract': typeof ApiExtractRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/db': typeof DbRoute
   '/demo': typeof DemoRoute
+  '/form': typeof FormRoute
+  '/pacer': typeof PacerRoute
+  '/store': typeof StoreRoute
   '/api/chat': typeof ApiChatRoute
   '/api/extract': typeof ApiExtractRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo' | '/api/chat' | '/api/extract'
+  fullPaths:
+    | '/'
+    | '/db'
+    | '/demo'
+    | '/form'
+    | '/pacer'
+    | '/store'
+    | '/api/chat'
+    | '/api/extract'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo' | '/api/chat' | '/api/extract'
-  id: '__root__' | '/' | '/demo' | '/api/chat' | '/api/extract'
+  to:
+    | '/'
+    | '/db'
+    | '/demo'
+    | '/form'
+    | '/pacer'
+    | '/store'
+    | '/api/chat'
+    | '/api/extract'
+  id:
+    | '__root__'
+    | '/'
+    | '/db'
+    | '/demo'
+    | '/form'
+    | '/pacer'
+    | '/store'
+    | '/api/chat'
+    | '/api/extract'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DbRoute: typeof DbRoute
   DemoRoute: typeof DemoRoute
+  FormRoute: typeof FormRoute
+  PacerRoute: typeof PacerRoute
+  StoreRoute: typeof StoreRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiExtractRoute: typeof ApiExtractRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/store': {
+      id: '/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof StoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pacer': {
+      id: '/pacer'
+      path: '/pacer'
+      fullPath: '/pacer'
+      preLoaderRoute: typeof PacerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/form': {
+      id: '/form'
+      path: '/form'
+      fullPath: '/form'
+      preLoaderRoute: typeof FormRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo': {
       id: '/demo'
       path: '/demo'
       fullPath: '/demo'
       preLoaderRoute: typeof DemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/db': {
+      id: '/db'
+      path: '/db'
+      fullPath: '/db'
+      preLoaderRoute: typeof DbRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,7 +197,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DbRoute: DbRoute,
   DemoRoute: DemoRoute,
+  FormRoute: FormRoute,
+  PacerRoute: PacerRoute,
+  StoreRoute: StoreRoute,
   ApiChatRoute: ApiChatRoute,
   ApiExtractRoute: ApiExtractRoute,
 }
