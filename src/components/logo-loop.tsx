@@ -73,7 +73,6 @@ export function LogoLoop({ className }: { className?: string }) {
 			>
 				{doubled.map((tech, i) => (
 					<div
-						// biome-ignore lint/suspicious/noArrayIndexKey: static array, never reordered
 						key={i}
 						className="flex shrink-0 items-center gap-2 rounded-lg border bg-background/80 px-4 py-2 shadow-sm"
 					>

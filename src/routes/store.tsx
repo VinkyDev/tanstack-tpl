@@ -16,7 +16,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/store")({ component: StorePage });
 
@@ -43,16 +43,16 @@ function StorePage() {
 
 			<Tabs defaultValue="store">
 				<TabsList>
-					<TabsTab value="store">createStore</TabsTab>
-					<TabsTab value="atom">createAtom + 派生</TabsTab>
+					<TabsTrigger value="store">createStore</TabsTrigger>
+					<TabsTrigger value="atom">createAtom + 派生</TabsTrigger>
 				</TabsList>
 
-				<TabsPanel value="store" className="pt-4">
+				<TabsContent value="store" className="pt-4">
 					<CounterDemo />
-				</TabsPanel>
-				<TabsPanel value="atom" className="pt-4">
+				</TabsContent>
+				<TabsContent value="atom" className="pt-4">
 					<DerivedAtomDemo />
-				</TabsPanel>
+				</TabsContent>
 			</Tabs>
 		</div>
 	);
@@ -177,7 +177,6 @@ function HistoryDisplay() {
 			<span className="text-muted-foreground text-sm">最近变化</span>
 			<div className="flex flex-wrap gap-1">
 				{history.map((v, i) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: static display, no reordering
 					<Badge key={i} variant="outline">
 						{v}
 					</Badge>

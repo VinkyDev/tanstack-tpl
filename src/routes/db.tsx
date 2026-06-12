@@ -76,9 +76,7 @@ function DbPage() {
 							>
 								<div className="min-w-0 flex-1">
 									<div className="flex items-center gap-2">
-										<Badge variant="secondary" size="sm">
-											{msg.user}
-										</Badge>
+										<Badge variant="secondary">{msg.user}</Badge>
 										<span className="text-muted-foreground text-xs">
 											#{msg.id}
 										</span>
@@ -156,9 +154,7 @@ function DbPage() {
 							</div>
 							<div className="flex items-center justify-between">
 								<span className="text-muted-foreground">查询状态</span>
-								<Badge variant={isLoading ? "warning" : "success"} size="sm">
-									{isLoading ? "loading" : "ready"}
-								</Badge>
+								<Badge>{isLoading ? "loading" : "ready"}</Badge>
 							</div>
 						</div>
 					</Card>

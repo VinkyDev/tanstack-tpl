@@ -18,7 +18,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { highlightUiDef, ProfileCardSchema } from "@/lib/ai-tools";
 import { cn } from "@/lib/utils";
@@ -47,16 +47,16 @@ function DemoPage() {
 
 			<Tabs defaultValue="agent">
 				<TabsList>
-					<TabsTab value="agent">Agent (流式 + 工具)</TabsTab>
-					<TabsTab value="structured">结构化输出 (流式)</TabsTab>
+					<TabsTrigger value="agent">Agent (流式 + 工具)</TabsTrigger>
+					<TabsTrigger value="structured">结构化输出 (流式)</TabsTrigger>
 				</TabsList>
 
-				<TabsPanel value="agent" className="pt-4">
+				<TabsContent value="agent" className="pt-4">
 					<AgentDemo highlight={highlight} setHighlight={setHighlight} />
-				</TabsPanel>
-				<TabsPanel value="structured" className="pt-4">
+				</TabsContent>
+				<TabsContent value="structured" className="pt-4">
 					<StructuredDemo />
-				</TabsPanel>
+				</TabsContent>
 			</Tabs>
 		</div>
 	);
@@ -330,11 +330,10 @@ function StructuredDemo() {
 				/>
 				<div className="mt-3 flex gap-2">
 					<Button
-						loading={isLoading}
-						disabled={!topic.trim()}
+						disabled={isLoading || !topic.trim()}
 						onClick={() => sendMessage(`为 "${topic.trim()}" 生成介绍卡片`)}
 					>
-						生成卡片
+						{isLoading && <Spinner className="mr-2 size-4" />} 生成卡片
 					</Button>
 					{isLoading && (
 						<span className="flex items-center gap-1.5 text-muted-foreground text-sm">

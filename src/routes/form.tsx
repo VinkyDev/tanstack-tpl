@@ -181,12 +181,7 @@ function FormPage() {
 							selector={(state) => [state.canSubmit, state.isSubmitting]}
 						>
 							{([canSubmit, isSubmitting]) => (
-								<Button
-									type="submit"
-									disabled={!canSubmit}
-									loading={isSubmitting}
-									className="w-full"
-								>
+								<Button type="submit" disabled={!canSubmit} className="w-full">
 									{isSubmitting ? "提交中..." : "提交"}
 								</Button>
 							)}
@@ -278,7 +273,7 @@ function StateRow({
 	return (
 		<div className="flex items-center justify-between rounded-lg border p-2.5">
 			<span className="text-muted-foreground text-sm">{label}</span>
-			<Badge variant={active ? "success" : "secondary"}>{value}</Badge>
+			<Badge variant={active ? "secondary" : "outline"}>{value}</Badge>
 		</div>
 	);
 }

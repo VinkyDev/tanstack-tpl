@@ -15,7 +15,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/pacer")({ component: PacerPage });
 
@@ -35,20 +35,20 @@ function PacerPage() {
 
 			<Tabs defaultValue="debounce">
 				<TabsList>
-					<TabsTab value="debounce">Debounce</TabsTab>
-					<TabsTab value="throttle">Throttle</TabsTab>
-					<TabsTab value="ratelimit">Rate Limit</TabsTab>
+					<TabsTrigger value="debounce">Debounce</TabsTrigger>
+					<TabsTrigger value="throttle">Throttle</TabsTrigger>
+					<TabsTrigger value="ratelimit">Rate Limit</TabsTrigger>
 				</TabsList>
 
-				<TabsPanel value="debounce" className="pt-4">
+				<TabsContent value="debounce" className="pt-4">
 					<DebounceDemo />
-				</TabsPanel>
-				<TabsPanel value="throttle" className="pt-4">
+				</TabsContent>
+				<TabsContent value="throttle" className="pt-4">
 					<ThrottleDemo />
-				</TabsPanel>
-				<TabsPanel value="ratelimit" className="pt-4">
+				</TabsContent>
+				<TabsContent value="ratelimit" className="pt-4">
 					<RateLimitDemo />
-				</TabsPanel>
+				</TabsContent>
 			</Tabs>
 		</div>
 	);
