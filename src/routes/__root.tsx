@@ -17,7 +17,7 @@ import {
 	Home,
 	Layers,
 } from "lucide-react";
-import { RouteErrorBoundary } from "@/components/route-error-boundary";
+import { RouteErrorBoundary } from "@/components/error-boundary";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
