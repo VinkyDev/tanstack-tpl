@@ -1,12 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-	createAtom,
-	createStore,
-	useAtom,
-	useStore,
-} from "@tanstack/react-store";
+import { createStore, useSelector } from "@tanstack/react-store";
 import { Layers, Minus, Plus, RotateCcw } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,13 +15,51 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/store")({ component: StorePage });
 
-// --- Store Demo 1: Counter Store ---
-const counterStore = createStore({ count: 0, step: 1 });
+// --- Store Demo 1: Counter with actions factory ---
+// Zustand-style: state + actions live together in one store.
+// Components subscribe to only the slice they need via useSelector.
+interface CounterState {
+	count: number;
+	step: number;
+}
 
-// --- Store Demo 2: Derived Atoms ---
-const priceAtom = createAtom(100);
-const quantityAtom = createAtom(2);
-const discountAtom = createAtom(0.1);
+const counterStore = createStore(
+	{ count: 0, step: 1 },
+	({
+		setState,
+	}: {
+		setState: (updater: (prev: CounterState) => CounterState) => void;
+	}) => ({
+		increment: () => setState((s) => ({ ...s, count: s.count + s.step })),
+		decrement: () => setState((s) => ({ ...s, count: s.count - s.step })),
+		reset: () => setState(() => ({ count: 0, step: 1 })),
+		setStep: (step: number) =>
+			setState((s) => ({ ...s, step: Math.max(1, step) })),
+	}),
+);
+
+// --- Store Demo 2: Derived selections ---
+// Derived values are computed inside useSelector selectors, not stored.
+// This is the zustand-style equivalent of computed atoms.
+interface CartState {
+	price: number;
+	quantity: number;
+	discount: number;
+}
+
+const cartStore = createStore(
+	{ price: 100, quantity: 2, discount: 0.1 },
+	({
+		setState,
+	}: {
+		setState: (updater: (prev: CartState) => CartState) => void;
+	}) => ({
+		setPrice: (price: number) => setState((s) => ({ ...s, price })),
+		setQuantity: (quantity: number) => setState((s) => ({ ...s, quantity })),
+		setDiscount: (discount: number) =>
+			setState((s) => ({ ...s, discount: Math.max(0, Math.min(1, discount)) })),
+	}),
+);
 
 function StorePage() {
 	return (
@@ -37,21 +70,22 @@ function StorePage() {
 					<h1 className="font-bold text-3xl">TanStack Store</h1>
 				</div>
 				<p className="text-muted-foreground">
-					轻量级响应式状态管理 — createStore / createAtom / 派生订阅
+					Zustand 风格状态管理 — createStore + useSelector 细粒度订阅 / actions
+					factory / selector 派生
 				</p>
 			</header>
 
-			<Tabs defaultValue="store">
+			<Tabs defaultValue="counter">
 				<TabsList>
-					<TabsTrigger value="store">createStore</TabsTrigger>
-					<TabsTrigger value="atom">createAtom + 派生</TabsTrigger>
+					<TabsTrigger value="counter">Counter + Actions</TabsTrigger>
+					<TabsTrigger value="derived">Selector 派生</TabsTrigger>
 				</TabsList>
 
-				<TabsContent value="store" className="pt-4">
+				<TabsContent value="counter" className="pt-4">
 					<CounterDemo />
 				</TabsContent>
-				<TabsContent value="atom" className="pt-4">
-					<DerivedAtomDemo />
+				<TabsContent value="derived" className="pt-4">
+					<DerivedDemo />
 				</TabsContent>
 			</Tabs>
 		</div>
@@ -67,7 +101,7 @@ function CounterDemo() {
 				<CardHeader>
 					<CardTitle className="text-base">计数器 Store</CardTitle>
 					<CardDescription>
-						通过 store.setState 直接更新，所有订阅组件自动重渲染
+						通过 store.actions 更新，useSelector 订阅避免无关重渲染
 					</CardDescription>
 				</CardHeader>
 				<div className="flex flex-col items-center gap-4 p-6 pt-0">
@@ -76,33 +110,21 @@ function CounterDemo() {
 						<Button
 							variant="outline"
 							size="icon"
-							onClick={() =>
-								counterStore.setState((s) => ({
-									...s,
-									count: s.count - s.step,
-								}))
-							}
+							onClick={() => counterStore.actions.decrement()}
 						>
 							<Minus className="size-4" />
 						</Button>
 						<Button
 							variant="outline"
 							size="icon"
-							onClick={() =>
-								counterStore.setState((s) => ({
-									...s,
-									count: s.count + s.step,
-								}))
-							}
+							onClick={() => counterStore.actions.increment()}
 						>
 							<Plus className="size-4" />
 						</Button>
 						<Button
 							variant="ghost"
 							size="icon"
-							onClick={() =>
-								counterStore.setState((s) => ({ ...s, count: 0, step: 1 }))
-							}
+							onClick={() => counterStore.actions.reset()}
 						>
 							<RotateCcw className="size-4" />
 						</Button>
@@ -116,7 +138,7 @@ function CounterDemo() {
 							onChange={(e) => {
 								const v = Number(e.target.value) || 1;
 								setLocalStep(v);
-								counterStore.setState((s) => ({ ...s, step: v }));
+								counterStore.actions.setStep(v);
 							}}
 						/>
 					</div>
@@ -126,9 +148,7 @@ function CounterDemo() {
 			<Card>
 				<CardHeader>
 					<CardTitle className="text-base">独立订阅组件</CardTitle>
-					<CardDescription>
-						每个组件只订阅自己关心的字段，避免无关重渲染
-					</CardDescription>
+					<CardDescription>每个组件只订阅自己关心的字段</CardDescription>
 				</CardHeader>
 				<div className="space-y-3 p-6 pt-0">
 					<StepDisplay />
@@ -140,7 +160,7 @@ function CounterDemo() {
 }
 
 function CounterDisplay() {
-	const count = useStore(counterStore, (s) => s.count);
+	const count = useSelector(counterStore, (s) => s.count);
 	return (
 		<div className="flex items-center gap-3">
 			<span className="text-muted-foreground text-sm">当前值</span>
@@ -150,7 +170,7 @@ function CounterDisplay() {
 }
 
 function StepDisplay() {
-	const step = useStore(counterStore, (s) => s.step);
+	const step = useSelector(counterStore, (s) => s.step);
 	return (
 		<div className="flex items-center justify-between rounded-lg border bg-muted/50 p-3">
 			<span className="text-sm">步长 (step)</span>
@@ -160,24 +180,22 @@ function StepDisplay() {
 }
 
 function HistoryDisplay() {
-	const [history, setHistory] = useState<number[]>([0]);
+	const count = useSelector(counterStore, (s) => s.count);
+	const [history, setHistory] = useState<number[]>([count]);
 
-	// 订阅 count 变化并记录历史
-	useStore(counterStore, (s) => s.count);
-
-	// 用 effect 监听变化（简化演示）
-	const current = counterStore.state.count;
-	const last = history[history.length - 1];
-	if (current !== last && !history.includes(current)) {
-		setHistory((h) => [...h.slice(-9), current]);
-	}
+	useEffect(() => {
+		setHistory((prev) => {
+			if (prev[prev.length - 1] === count) return prev;
+			return [...prev.slice(-9), count];
+		});
+	}, [count]);
 
 	return (
 		<div className="space-y-1">
 			<span className="text-muted-foreground text-sm">最近变化</span>
 			<div className="flex flex-wrap gap-1">
 				{history.map((v, i) => (
-					<Badge key={i} variant="outline">
+					<Badge key={`${v}-${i}`} variant="outline">
 						{v}
 					</Badge>
 				))}
@@ -186,13 +204,22 @@ function HistoryDisplay() {
 	);
 }
 
-function DerivedAtomDemo() {
-	const [price] = useAtom(priceAtom);
-	const [quantity] = useAtom(quantityAtom);
-	const [discount] = useAtom(discountAtom);
+function DerivedDemo() {
+	const price = useSelector(cartStore, (s) => s.price);
+	const quantity = useSelector(cartStore, (s) => s.quantity);
+	const discount = useSelector(cartStore, (s) => s.discount);
 
-	const subtotal = price * quantity;
-	const total = subtotal * (1 - discount);
+	// Derived values are computed on read via selectors.
+	// Each selector only re-computes when its dependencies change.
+	const subtotal = useSelector(cartStore, (s) => s.price * s.quantity);
+	const discountAmount = useSelector(
+		cartStore,
+		(s) => s.price * s.quantity * s.discount,
+	);
+	const total = useSelector(
+		cartStore,
+		(s) => s.price * s.quantity * (1 - s.discount),
+	);
 
 	return (
 		<div className="grid gap-4 lg:grid-cols-2">
@@ -200,35 +227,35 @@ function DerivedAtomDemo() {
 				<CardHeader>
 					<CardTitle className="text-base">原子状态</CardTitle>
 					<CardDescription>
-						createAtom 创建独立原子，可组合成派生计算
+						Store 中只存原始值，派生值交给 useSelector
 					</CardDescription>
 				</CardHeader>
 				<div className="space-y-4 p-6 pt-0">
-					<AtomField
+					<RangeField
 						label="单价 (price)"
 						value={price}
-						onChange={(v) => priceAtom.set(v)}
+						onChange={(v) => cartStore.actions.setPrice(v)}
 					/>
-					<AtomField
+					<RangeField
 						label="数量 (quantity)"
 						value={quantity}
-						onChange={(v) => quantityAtom.set(v)}
+						onChange={(v) => cartStore.actions.setQuantity(v)}
 					/>
-					<AtomField
+					<RangeField
 						label="折扣 (discount)"
 						value={discount}
 						step={0.05}
 						max={1}
-						onChange={(v) => discountAtom.set(v)}
+						onChange={(v) => cartStore.actions.setDiscount(v)}
 					/>
 				</div>
 			</Card>
 
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-base">派生计算</CardTitle>
+					<CardTitle className="text-base">Selector 派生</CardTitle>
 					<CardDescription>
-						基于 Atom 的纯派生值，无需额外订阅逻辑
+						useSelector 内部做纯计算，组件只订阅结果
 					</CardDescription>
 				</CardHeader>
 				<div className="space-y-3 p-6 pt-0">
@@ -241,8 +268,7 @@ function DerivedAtomDemo() {
 					<div className="flex items-center justify-between rounded-lg border p-3">
 						<span className="text-sm text-muted-foreground">折扣</span>
 						<span className="font-mono font-medium">
-							-¥{(subtotal * discount).toFixed(2)} (
-							{(discount * 100).toFixed(0)}%)
+							-¥{discountAmount.toFixed(2)} ({(discount * 100).toFixed(0)}%)
 						</span>
 					</div>
 					<div className="flex items-center justify-between rounded-lg bg-primary/5 p-3">
@@ -257,7 +283,7 @@ function DerivedAtomDemo() {
 	);
 }
 
-function AtomField({
+function RangeField({
 	label,
 	value,
 	onChange,

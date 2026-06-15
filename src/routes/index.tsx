@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
 	ArrowRight,
 	Bot,
+	CheckCircle2,
 	Database,
 	FormInput,
 	Gauge,
@@ -27,6 +28,14 @@ const demos = [
 		href: "/demo",
 		color: "text-violet-500",
 		bg: "bg-violet-500/10",
+	},
+	{
+		title: "TanStack Query + Drizzle",
+		description: "服务端数据获取 + 缓存 + CRUD",
+		icon: CheckCircle2,
+		href: "/todos",
+		color: "text-blue-500",
+		bg: "bg-blue-500/10",
 	},
 	{
 		title: "TanStack Store",

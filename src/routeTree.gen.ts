@@ -9,15 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TodosRouteImport } from './routes/todos'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as PacerRouteImport } from './routes/pacer'
 import { Route as FormRouteImport } from './routes/form'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as DbRouteImport } from './routes/db'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiTodosRouteImport } from './routes/api.todos'
 import { Route as ApiExtractRouteImport } from './routes/api.extract'
 import { Route as ApiChatRouteImport } from './routes/api.chat'
 
+const TodosRoute = TodosRouteImport.update({
+  id: '/todos',
+  path: '/todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoreRoute = StoreRouteImport.update({
   id: '/store',
   path: '/store',
@@ -48,6 +55,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTodosRoute = ApiTodosRouteImport.update({
+  id: '/api/todos',
+  path: '/api/todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiExtractRoute = ApiExtractRouteImport.update({
   id: '/api/extract',
   path: '/api/extract',
@@ -66,8 +78,10 @@ export interface FileRoutesByFullPath {
   '/form': typeof FormRoute
   '/pacer': typeof PacerRoute
   '/store': typeof StoreRoute
+  '/todos': typeof TodosRoute
   '/api/chat': typeof ApiChatRoute
   '/api/extract': typeof ApiExtractRoute
+  '/api/todos': typeof ApiTodosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,8 +90,10 @@ export interface FileRoutesByTo {
   '/form': typeof FormRoute
   '/pacer': typeof PacerRoute
   '/store': typeof StoreRoute
+  '/todos': typeof TodosRoute
   '/api/chat': typeof ApiChatRoute
   '/api/extract': typeof ApiExtractRoute
+  '/api/todos': typeof ApiTodosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,8 +103,10 @@ export interface FileRoutesById {
   '/form': typeof FormRoute
   '/pacer': typeof PacerRoute
   '/store': typeof StoreRoute
+  '/todos': typeof TodosRoute
   '/api/chat': typeof ApiChatRoute
   '/api/extract': typeof ApiExtractRoute
+  '/api/todos': typeof ApiTodosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,8 +117,10 @@ export interface FileRouteTypes {
     | '/form'
     | '/pacer'
     | '/store'
+    | '/todos'
     | '/api/chat'
     | '/api/extract'
+    | '/api/todos'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,8 +129,10 @@ export interface FileRouteTypes {
     | '/form'
     | '/pacer'
     | '/store'
+    | '/todos'
     | '/api/chat'
     | '/api/extract'
+    | '/api/todos'
   id:
     | '__root__'
     | '/'
@@ -119,8 +141,10 @@ export interface FileRouteTypes {
     | '/form'
     | '/pacer'
     | '/store'
+    | '/todos'
     | '/api/chat'
     | '/api/extract'
+    | '/api/todos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -130,12 +154,21 @@ export interface RootRouteChildren {
   FormRoute: typeof FormRoute
   PacerRoute: typeof PacerRoute
   StoreRoute: typeof StoreRoute
+  TodosRoute: typeof TodosRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiExtractRoute: typeof ApiExtractRoute
+  ApiTodosRoute: typeof ApiTodosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/todos': {
+      id: '/todos'
+      path: '/todos'
+      fullPath: '/todos'
+      preLoaderRoute: typeof TodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/store': {
       id: '/store'
       path: '/store'
@@ -178,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/todos': {
+      id: '/api/todos'
+      path: '/api/todos'
+      fullPath: '/api/todos'
+      preLoaderRoute: typeof ApiTodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/extract': {
       id: '/api/extract'
       path: '/api/extract'
@@ -202,8 +242,10 @@ const rootRouteChildren: RootRouteChildren = {
   FormRoute: FormRoute,
   PacerRoute: PacerRoute,
   StoreRoute: StoreRoute,
+  TodosRoute: TodosRoute,
   ApiChatRoute: ApiChatRoute,
   ApiExtractRoute: ApiExtractRoute,
+  ApiTodosRoute: ApiTodosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

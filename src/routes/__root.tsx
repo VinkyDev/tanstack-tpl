@@ -8,7 +8,15 @@ import {
 	useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { Bot, Database, FormInput, Gauge, Home, Layers } from "lucide-react";
+import {
+	Bot,
+	CheckCircle2,
+	Database,
+	FormInput,
+	Gauge,
+	Home,
+	Layers,
+} from "lucide-react";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -55,6 +63,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 const navItems = [
 	{ to: "/", label: "首页", icon: Home },
 	{ to: "/demo", label: "AI", icon: Bot },
+	{ to: "/todos", label: "Todos", icon: CheckCircle2 },
 	{ to: "/store", label: "Store", icon: Layers },
 	{ to: "/db", label: "DB", icon: Database },
 	{ to: "/pacer", label: "Pacer", icon: Gauge },
@@ -63,7 +72,7 @@ const navItems = [
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="zh-CN">
+		<html lang="zh-CN" suppressHydrationWarning>
 			<head>
 				<HeadContent />
 			</head>

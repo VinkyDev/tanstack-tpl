@@ -1,11 +1,15 @@
 import { createEnv } from "@t3-oss/env-core";
+import { config } from "dotenv";
 import { z } from "zod";
+
+config({ path: [".env.local", ".env"] });
 
 export const env = createEnv({
 	server: {
 		SERVER_URL: z.url().optional(),
 		AI_BASE_URL: z.string().min(1),
 		AI_API_KEY: z.string().min(1),
+		DATABASE_URL: z.string().min(1),
 	},
 	clientPrefix: "VITE_",
 	client: {
