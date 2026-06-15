@@ -43,18 +43,6 @@
       "skillPath": "skills/caveman-stats/SKILL.md",
       "computedHash": "47ce2de3d6cb39a75047b5c962e4eb3da15594e7397c94103e9a104d42626553"
     },
-    "coss": {
-      "source": "cosscom/coss",
-      "sourceType": "github",
-      "skillPath": "apps/ui/skills/coss/SKILL.md",
-      "computedHash": "d38dc6e0df3191b9a5b9f2c4b6984793d689922b49f8af78d4e1876645bac836"
-    },
-    "coss-particles": {
-      "source": "cosscom/coss",
-      "sourceType": "github",
-      "skillPath": "apps/ui/skills/coss-particles/SKILL.md",
-      "computedHash": "44c9d1c501a8f76c5332740795a2fa0f07dc814cd1a2c4a6103a971eb982db79"
-    },
     "shadcn": {
       "source": "shadcn/ui",
       "sourceType": "github",

@@ -17,6 +17,7 @@ import {
 	Home,
 	Layers,
 } from "lucide-react";
+import { RouteErrorBoundary } from "@/components/route-error-boundary";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -57,6 +58,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		],
 	}),
 	notFoundComponent: DefaultNotFound,
+	errorComponent: RouteErrorBoundary,
 	shellComponent: RootDocument,
 });
 

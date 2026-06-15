@@ -78,6 +78,7 @@
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.132.0",
     "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.10.2",
     "@types/pg": "^8.15.6",
@@ -88,11 +89,17 @@
     "dotenv": "^17.3.1",
     "husky": "^9.1.7",
     "jsdom": "^28.1.0",
+    "lint-staged": "^17.0.7",
     "shadcn": "^4.11.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",
     "vitest": "^4.1.5"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
   },
   "pnpm": {
     "onlyBuiltDependencies": [
