@@ -8,10 +8,6 @@ Before substantial work:
 - Multiple matches: prefer the most specific local skill for the package or concern you are changing; load additional skills only when the task spans multiple packages or concerns.
 <!-- intent-skills:end -->
 
-# Rules
-
-@.agents/rules.md
-
 # Tech Stack
 
 TanStack Start + React 19 + Vite 8 + Tailwind 4 + Base UI/Shadcn + PostgreSQL/Drizzle.
