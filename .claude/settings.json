@@ -10,5 +10,8 @@
       "mcp__codegraph__codegraph_files",
       "mcp__codegraph__codegraph_status"
     ]
+  },
+  "enabledPlugins": {
+    "ponytail@ponytail": true
   }
 }
