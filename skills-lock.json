@@ -13,6 +13,12 @@
       "skillPath": "skills/engineering/codebase-design/SKILL.md",
       "computedHash": "2426dc4accf1a85dedfb560edb3a877ec8828b7375ea08c970df2b6c900a2a22"
     },
+    "coding-conventions": {
+      "source": "VinkyDev/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/coding-conventions/SKILL.md",
+      "computedHash": "2890f3f466efe5441dcf6a56331c643c53389a713e9f250711074acb43484eb7"
+    },
     "diagnosing-bugs": {
       "source": "mattpocock/skills",
       "sourceType": "github",
